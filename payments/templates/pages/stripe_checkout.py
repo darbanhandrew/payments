@@ -36,18 +36,19 @@ def get_context(context):
 		gateway_controller = get_gateway_controller(
 			context.reference_doctype, context.reference_docname
 		)
+		
 		context.publishable_key = get_api_key(context.reference_docname, gateway_controller)
 		context.image = get_header_image(context.reference_docname, gateway_controller)
 
 		context["amount"] = fmt_money(amount=context["amount"], currency=context["currency"])
 
 		if is_a_subscription(context.reference_doctype, context.reference_docname):
-			payment_plan = frappe.db.get_value(
-				context.reference_doctype, context.reference_docname, "payment_plan"
-			)
-			recurrence = frappe.db.get_value("Payment Plan", payment_plan, "recurrence")
+			# payment_plan = frappe.db.get_value(
+			# 	context.reference_doctype, context.reference_docname, "subscription_plan"
+			# )
+			# recurrence = frappe.db.get_value("Subscription Plan", payment_plan, "recurrence")
 
-			context["amount"] = context["amount"] + " " + _(recurrence)
+			context["amount"] = context["amount"] + " " + _("Monthly")
 
 	else:
 		frappe.redirect_to_message(
